@@ -1,11 +1,11 @@
-# auto-log
+# resubmit
 
-[auto-log](https://github.com/houbb/auto-log) 是一款为 java 设计的自动日志监控框架。
+[resubmit](https://github.com/houbb/resubmit) 是一款为 java 设计的自动日志监控框架。
 
-[![Build Status](https://travis-ci.com/houbb/auto-log.svg?branch=master)](https://travis-ci.com/houbb/auto-log)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/auto-log/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/auto-log)
-[![](https://img.shields.io/badge/license-Apache2-FF0080.svg)](https://github.com/houbb/auto-log/blob/master/LICENSE.txt)
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/houbb/auto-log)
+[![Build Status](https://travis-ci.com/houbb/resubmit.svg?branch=master)](https://travis-ci.com/houbb/resubmit)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/resubmit/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/resubmit)
+[![](https://img.shields.io/badge/license-Apache2-FF0080.svg)](https://github.com/houbb/resubmit/blob/master/LICENSE.txt)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/houbb/resubmit)
 
 ## 创作目的
 
@@ -23,7 +23,7 @@
 
 - 支持注解式，完美整合 spring
 
-> [变更日志](https://github.com/houbb/auto-log/blob/master/CHANGELOG.md)
+> [变更日志](https://github.com/houbb/resubmit/blob/master/CHANGELOG.md)
 
 # 快速开始
 
@@ -32,7 +32,7 @@
 ```xml
 <dependency>
     <group>com.github.houbb</group>
-    <artifact>auto-log-core</artifact>
+    <artifact>resubmit-core</artifact>
     <version>0.0.3</version>
 </dependency>
 ```
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
 # spring 整合使用
 
-完整示例参考 [SpringServiceTest](https://github.com/houbb/auto-log/tree/master/auto-log-test/src/test/java/com/github/houbb/auto/log/spring/SpringServiceTest.java)
+完整示例参考 [SpringServiceTest](https://github.com/houbb/resubmit/tree/master/resubmit-test/src/test/java/com/github/houbb/auto/log/spring/SpringServiceTest.java)
 
 ## 注解声明
 

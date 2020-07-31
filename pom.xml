@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c)  2019. houbinbin Inc.
-  ~ auto-log All rights reserved.
+  ~ resubmit All rights reserved.
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -183,8 +183,8 @@
     </build>
 
     <!--============================== ADD For sonatype START ==============================-->
-    <name>auto-log</name>
-    <description>The auto-log tool for java.</description>
+    <name>resubmit</name>
+    <description>The resubmit tool for java.</description>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -199,8 +199,8 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/houbb/auto-log</url>
-        <connection>https://github.com/houbb/auto-log.git</connection>
+        <url>https://github.com/houbb/resubmit</url>
+        <connection>https://github.com/houbb/resubmit.git</connection>
         <developerConnection>https://houbb.github.io/</developerConnection>
     </scm>
     <developers>

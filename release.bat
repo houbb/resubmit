@@ -16,7 +16,7 @@ SET newVersion=0.0.4
 :::: 组织名称
 SET groupName=com.github.houbb
 :::: 项目名称
-SET projectName=auto-log
+SET projectName=resubmit
 
 :: release 项目版本
 :::: snapshot 版本号
