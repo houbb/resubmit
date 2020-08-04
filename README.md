@@ -33,7 +33,7 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
@@ -75,8 +75,63 @@ public void untilTtlTest() {
 }
 ```
 
-# Road-Map
+# spring 整合使用
 
-- [ ] spring 整合
+## maven 引入
+
+```xml
+<dependency>
+    <group>com.github.houbb</group>
+    <artifact>resubmit-spring</artifact>
+    <version>0.0.2</version>
+</dependency>
+```
+
+## 代码编写
+
+- UserService.java
+
+```java
+@Service
+public class UserService {
+
+    @Resubmit(ttl = 5)
+    public void queryInfo(final String id) {
+        System.out.println("query info: " + id);
+    }
+
+}
+```
+
+- SpringConfig.java
+
+```java
+@ComponentScan("com.github.houbb.resubmit.test.service")
+@EnableResubmit
+@Configuration
+public class SpringConfig {
+}
+```
+
+## 测试代码
+
+```java
+@ContextConfiguration(classes = SpringConfig.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ResubmitSpringTest {
+
+    @Autowired
+    private UserService service;
+
+    @Test(expected = ResubmitException.class)
+    public void queryTest() {
+        service.queryInfo("1");
+        service.queryInfo("1");
+    }
+
+}
+```
+
+# Road-Map
 
 - [ ] spring-boot 整合

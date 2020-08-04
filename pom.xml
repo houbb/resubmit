@@ -12,11 +12,12 @@
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <modules>
         <module>resubmit-api</module>
         <module>resubmit-core</module>
         <module>resubmit-test</module>
+        <module>resubmit-spring</module>
     </modules>
 
     <properties>
@@ -63,6 +64,11 @@
                 <artifactId>resubmit-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>resubmit-spring</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!--============================== INTER ==============================-->
             <dependency>
@@ -78,6 +84,11 @@
             <dependency>
                 <groupId>com.github.houbb</groupId>
                 <artifactId>aop-core</artifactId>
+                <version>${aop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>aop-spring</artifactId>
                 <version>${aop.version}</version>
             </dependency>
 

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>resubmit-test</artifactId>
+    <artifactId>resubmit-spring</artifactId>
 
     <dependencies>
         <!--============================== SELF ==============================-->
@@ -17,19 +17,12 @@
             <groupId>com.github.houbb</groupId>
             <artifactId>resubmit-core</artifactId>
         </dependency>
+
+        <!--============================== INTER ==============================-->
         <dependency>
             <groupId>com.github.houbb</groupId>
-            <artifactId>resubmit-spring</artifactId>
+            <artifactId>aop-spring</artifactId>
         </dependency>
-
-        <!--============================== SELF ==============================-->
-        <dependency>
-            <groupId>com.github.houbb</groupId>
-            <artifactId>test-spring</artifactId>
-        </dependency>
-
     </dependencies>
-
-
 
 </project>
