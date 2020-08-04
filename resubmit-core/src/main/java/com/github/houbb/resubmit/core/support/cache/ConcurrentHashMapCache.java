@@ -42,7 +42,7 @@ public class ConcurrentHashMapCache implements ICache {
     private static class CleanTask implements Runnable {
         @Override
         public void run() {
-            LOG.info("[Clean] 开始清理过期数据");
+            LOG.info("[Cache] 开始清理过期数据");
 
             // 当前时间固定，不需要考虑删除的耗时
             // 毕竟最多相差 1s，但是和系统的时钟交互是比删除耗时多的。
@@ -53,29 +53,33 @@ public class ConcurrentHashMapCache implements ICache {
                 if(currentMills >= live) {
                     final String key = entry.getKey();
                     MAP.remove(key);
-                    LOG.info("[Clean] 移除 key: {}", key);
+                    LOG.info("[Cache] 移除 key: {}", key);
                 }
             }
 
-            LOG.info("[Clean] 结束清理过期数据");
+            LOG.info("[Cache] 结束清理过期数据");
         }
     }
 
     @Override
     public void put(String key, int ttlSeconds) {
         if(ttlSeconds <= 0) {
-            LOG.info("[put] ttl is less than 1, just ignore.");
+            LOG.info("[Cache] ttl is less than 1, just ignore.");
             return;
         }
         long time = System.currentTimeMillis();
         long liveTo = time + ttlSeconds * 1000;
 
+        LOG.info("[Cache] put into cache, key: {}, live to: {}", key, liveTo);
         MAP.putIfAbsent(key, liveTo);
     }
 
     @Override
     public boolean contains(String key) {
-        return MAP.containsKey(key);
+        boolean result =  MAP.containsKey(key);
+
+        LOG.info("[Cache] contains key: {} result: {}", key, result);
+        return result;
     }
 
 }

@@ -5,6 +5,7 @@ import com.github.houbb.resubmit.api.support.ICache;
 import com.github.houbb.resubmit.api.support.IKeyGenerator;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
@@ -18,6 +19,12 @@ public class ResubmitContext implements IResubmitContext {
      * @since 0.0.1
      */
     private Object[] params;
+
+    /**
+     * 方法信息
+     * @since 0.0.1
+     */
+    private Method method;
 
     /**
      * 存活时间
@@ -45,6 +52,16 @@ public class ResubmitContext implements IResubmitContext {
 
     public static ResubmitContext newInstance() {
         return new ResubmitContext();
+    }
+
+    @Override
+    public Method method() {
+        return method;
+    }
+
+    public ResubmitContext method(Method method) {
+        this.method = method;
+        return this;
     }
 
     @Override
@@ -101,6 +118,7 @@ public class ResubmitContext implements IResubmitContext {
     public String toString() {
         return "ResubmitContext{" +
                 "params=" + Arrays.toString(params) +
+                ", method=" + method +
                 ", ttl=" + ttl +
                 ", keyGenerator=" + keyGenerator +
                 ", tokenGenerator=" + tokenGenerator +

@@ -4,6 +4,8 @@ import com.github.houbb.resubmit.api.support.ICache;
 import com.github.houbb.resubmit.api.support.IKeyGenerator;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 
+import java.lang.reflect.Method;
+
 /**
  * @author binbin.hou
  * @since 0.0.1
@@ -16,6 +18,13 @@ public interface IResubmitContext {
      * @since 0.0.1
      */
     Object[] params();
+
+    /**
+     * 方法信息
+     * @since 0.0.1
+     * @return 方法
+     */
+    Method method();
 
     /**
      * 锁的存活时间

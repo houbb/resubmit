@@ -1,6 +1,7 @@
 package com.github.houbb.resubmit.core.bs;
 
 import com.github.houbb.heaven.support.instance.impl.Instances;
+import com.github.houbb.heaven.util.common.ArgUtil;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
 import com.github.houbb.heaven.util.lang.reflect.ClassUtil;
 import com.github.houbb.resubmit.api.core.IResubmit;
@@ -13,6 +14,8 @@ import com.github.houbb.resubmit.core.api.ResubmitContext;
 import com.github.houbb.resubmit.core.support.cache.ConcurrentHashMapCache;
 import com.github.houbb.resubmit.core.support.key.KeyGeneratorFastJson;
 import com.github.houbb.resubmit.core.support.token.HttpServletRequestTokenGenerator;
+
+import java.lang.reflect.Method;
 
 /**
  * 引导类
@@ -52,6 +55,12 @@ public class ResubmitBs {
      * @since 0.0.1
      */
     private int ttl = 60;
+
+    /**
+     * 方法信息
+     * @since 0.0.1
+     */
+    private Method method;
 
     /**
      * 参数信息
@@ -105,6 +114,15 @@ public class ResubmitBs {
         return this;
     }
 
+    public Method method() {
+        return method;
+    }
+
+    public ResubmitBs method(Method method) {
+        this.method = method;
+        return this;
+    }
+
     public Object[] params() {
         return params;
     }
@@ -119,11 +137,14 @@ public class ResubmitBs {
      * @since 0.0.1
      */
     public void resubmit() {
+        //0. param check
+        ArgUtil.notNull(method, "method");
+
         //1. 默认值
         fillDefault();
 
         //2. 构建实例
-        final ICache cacheInstance = ClassUtil.newInstance(cache);
+        final ICache cacheInstance = Instances.singleton(cache);
         final IKeyGenerator keyInstance = ClassUtil.newInstance(keyGenerator);
         final ITokenGenerator tokenInstance = ClassUtil.newInstance(tokenGenerator);
 
@@ -132,6 +153,7 @@ public class ResubmitBs {
                 .cache(cacheInstance)
                 .keyGenerator(keyInstance)
                 .tokenGenerator(tokenInstance)
+                .method(method)
                 .params(params)
                 .ttl(ttl)
                 ;

@@ -12,10 +12,11 @@
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <modules>
         <module>resubmit-api</module>
         <module>resubmit-core</module>
+        <module>resubmit-test</module>
     </modules>
 
     <properties>
@@ -35,9 +36,10 @@
         <project.compiler.level>1.7</project.compiler.level>
 
         <!--============================== INTER ==============================-->
-        <heaven.version>0.1.105</heaven.version>
+        <heaven.version>0.1.112</heaven.version>
         <log-integration.version>1.1.8</log-integration.version>
-        <aop.version>0.0.2-SNAPSHOT</aop.version>
+        <aop.version>0.0.2</aop.version>
+        <test.version>0.0.1</test.version>
 
         <!--============================== OTHER ==============================-->
         <junit.version>4.12</junit.version>
@@ -78,10 +80,11 @@
                 <artifactId>aop-core</artifactId>
                 <version>${aop.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.github.houbb</groupId>
-                <artifactId>aop-spring</artifactId>
-                <version>${aop.version}</version>
+                <artifactId>test-spring</artifactId>
+                <version>${test.version}</version>
             </dependency>
 
             <!--============================== OTHER ==============================-->
@@ -97,20 +100,8 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <optional>true</optional>
-                <scope>test</scope>
-            </dependency>
 
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-                <scope>test</scope>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

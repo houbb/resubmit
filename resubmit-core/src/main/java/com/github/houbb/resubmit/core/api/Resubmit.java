@@ -9,6 +9,8 @@ import com.github.houbb.resubmit.api.exception.ResubmitException;
 import com.github.houbb.resubmit.api.support.ICache;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 
+import java.lang.reflect.Method;
+
 /**
  * @author binbin.hou
  * @since 0.0.1
@@ -27,7 +29,8 @@ public class Resubmit implements IResubmit {
         final ICache cache = context.cache();
         final ITokenGenerator tokenGenerator = context.tokenGenerator();
         Object[] params = context.params();
-        String paramKey = context.keyGenerator().gen(params);
+        Method method = context.method();
+        String paramKey = context.keyGenerator().gen(method, params);
         String tokenKey = tokenGenerator.gen(params);
 
         String fullKey = tokenKey+paramKey;
@@ -42,7 +45,7 @@ public class Resubmit implements IResubmit {
         //2. 没有提交过
         // 正常的流程处理
         cache.put(fullKey, context.ttl());
-        LOG.info("设置 cache 信息, key: {}, ttl: {}", context.ttl());
+        LOG.info("设置 cache 信息, key: {}, ttl: {}", fullKey, context.ttl());
     }
 
 }

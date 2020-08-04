@@ -26,15 +26,18 @@ import java.lang.reflect.Proxy;
  */
 public final class ResubmitProxy {
 
+    private ResubmitProxy(){}
+
     /**
      * 获取对象代理
      * @param object 对象代理
      * @return 代理信息
      * @since 0.0.1
      */
-    public static Object getProxy(final Object object) {
+    @SuppressWarnings("all")
+    public static <T> T getProxy(final T object) {
         if(ObjectUtil.isNull(object)) {
-            return new NoneProxy(object).proxy();
+            return (T) new NoneProxy(object).proxy();
         }
 
         final Class clazz = object.getClass();
@@ -42,10 +45,10 @@ public final class ResubmitProxy {
         // 如果targetClass本身是个接口或者targetClass是JDK Proxy生成的,则使用JDK动态代理。
         // 参考 spring 的 AOP 判断
         if (clazz.isInterface() || Proxy.isProxyClass(clazz)) {
-            return new DynamicProxy(object).proxy();
+            return (T) new DynamicProxy(object).proxy();
         }
 
-        return new CglibProxy(object).proxy();
+        return (T) new CglibProxy(object).proxy();
     }
 
 
@@ -66,6 +69,7 @@ public final class ResubmitProxy {
                     .ttl(resubmit.ttl())
                     .keyGenerator(resubmit.keyGenerator())
                     .tokenGenerator(resubmit.tokenGenerator())
+                    .method(method)
                     .params(args)
                     .resubmit();
         }

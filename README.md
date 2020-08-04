@@ -1,6 +1,6 @@
 # resubmit
 
-[resubmit](https://github.com/houbb/resubmit) 是一款为 java 设计的自动日志监控框架。
+[resubmit](https://github.com/houbb/resubmit) 是一款为 java 设计的防止重复提交框架。
 
 [![Build Status](https://travis-ci.com/houbb/resubmit.svg?branch=master)](https://travis-ci.com/houbb/resubmit)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/resubmit/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/resubmit)
@@ -9,7 +9,7 @@
 
 ## 创作目的
 
-经常会写一些工具，有时候手动加一些日志很麻烦，引入 spring 又过于大材小用。
+经常会写一些工具，有时候手动加防止重复提交很麻烦，引入 spring 又过于大材小用。
 
 所以希望从从简到繁实现一个工具，便于平时使用。
 
@@ -33,105 +33,50 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>0.0.3</version>
+    <version>0.0.1</version>
 </dependency>
 ```
 
-## 入门案例
-
-```java
-UserService userService = AutoLogHelper.proxy(new UserServiceImpl());
-userService.queryLog("1");
-```
-
-- 日志如下
-
-```
-[INFO] [2020-05-29 16:24:06.227] [main] [c.g.h.a.l.c.s.i.AutoLogMethodInterceptor.invoke] - public java.lang.String com.github.houbb.auto.log.test.service.impl.UserServiceImpl.queryLog(java.lang.String) param is [1]
-[INFO] [2020-05-29 16:24:06.228] [main] [c.g.h.a.l.c.s.i.AutoLogMethodInterceptor.invoke] - public java.lang.String com.github.houbb.auto.log.test.service.impl.UserServiceImpl.queryLog(java.lang.String) result is result-1
-```
-
-### 代码
-
-其中方法实现如下：
+## 编码
 
 - UserService.java
 
 ```java
-public interface UserService {
-
-    String queryLog(final String id);
-
+@Resubmit(ttl = 5)
+public void queryInfo(final String id) {
+    System.out.println("query info: " + id);
 }
 ```
 
-- UserServiceImpl.java
-
-直接使用注解 `@AutoLog` 指定需要打日志的方法即可。
+- 测试代码
 
 ```java
-public class UserServiceImpl implements UserService {
-
-    @Override
-    @AutoLog
-    public String queryLog(String id) {
-        return "result-"+id);
-    }
-
+@Test(expected = ResubmitException.class)
+public void errorTest() {
+    UserService service = ResubmitProxy.getProxy(new UserService());
+    service.queryInfo("1");
+    service.queryInfo("1");
 }
 ```
 
-# spring 整合使用
+相同的参数直接提交2次，就会报错。
 
-完整示例参考 [SpringServiceTest](https://github.com/houbb/resubmit/tree/master/resubmit-test/src/test/java/com/github/houbb/auto/log/spring/SpringServiceTest.java)
+- 测试场景2
 
-## 注解声明
-
-使用 `@EnableAutoLog` 启用自动日志输出
+如果等待超过指定的 5s，就不会报错。
 
 ```java
-@Configurable
-@ComponentScan(basePackages = "com.github.houbb.auto.log.test.service")
-@EnableAutoLog
-public class SpringConfig {
+@Test
+public void untilTtlTest() {
+    UserService service = ResubmitProxy.getProxy(new UserService());
+    service.queryInfo("1");
+    DateUtil.sleep(TimeUnit.SECONDS, 6);
+    service.queryInfo("1");
 }
-```
-
-## 测试代码
-
-```java
-@ContextConfiguration(classes = SpringConfig.class)
-@RunWith(SpringJUnit4ClassRunner.class)
-public class SpringServiceTest {
-
-    @Autowired
-    private UserService userService;
-
-    @Test
-    public void queryLogTest() {
-        userService.queryLog("1");
-    }
-
-}
-```
-
-- 输出结果
-
-```
-信息: public java.lang.String com.github.houbb.auto.log.test.service.impl.UserServiceImpl.queryLog(java.lang.String) param is [1]
-五月 30, 2020 12:17:51 下午 com.github.houbb.auto.log.core.support.interceptor.AutoLogMethodInterceptor info
-信息: public java.lang.String com.github.houbb.auto.log.test.service.impl.UserServiceImpl.queryLog(java.lang.String) result is result-1
-五月 30, 2020 12:17:51 下午 org.springframework.context.support.GenericApplicationContext doClose
 ```
 
 # Road-Map
 
-- [ ] 注解特性拓展
+- [ ] spring 整合
 
-- [ ] 拦截实现拓展
-
-- [ ] 慢日志处理
-
-- [ ] aop 模块的抽离
-
-- [ ] jvm-sandbox 特性
+- [ ] spring-boot 整合
