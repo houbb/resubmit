@@ -135,3 +135,9 @@ public class ResubmitSpringTest {
 # Road-Map
 
 - [ ] spring-boot 整合
+
+- [ ] 优化 spring 对应的版本依赖
+
+- [ ] 添加基于 redis 的 cache 实现
+
+- [ ] 添加基于 mysql 的 cache 实现
