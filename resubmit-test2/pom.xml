@@ -9,17 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>resubmit-test</artifactId>
+    <artifactId>resubmit-test2</artifactId>
 
     <dependencies>
-        <!--============================== SELF ==============================-->
         <dependency>
             <groupId>com.github.houbb</groupId>
-            <artifactId>resubmit-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.houbb</groupId>
-            <artifactId>resubmit-spring</artifactId>
+            <artifactId>resubmit-springboot-starter</artifactId>
         </dependency>
 
         <!--============================== SELF ==============================-->
@@ -27,9 +22,5 @@
             <groupId>com.github.houbb</groupId>
             <artifactId>test-spring</artifactId>
         </dependency>
-
     </dependencies>
-
-
-
 </project>

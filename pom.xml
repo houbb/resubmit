@@ -12,13 +12,14 @@
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <modules>
         <module>resubmit-api</module>
         <module>resubmit-core</module>
         <module>resubmit-test</module>
         <module>resubmit-spring</module>
         <module>resubmit-springboot-starter</module>
+        <module>resubmit-test2</module>
     </modules>
 
     <properties>

@@ -9,7 +9,7 @@
 
 ## 创作目的
 
-经常会写一些工具，有时候手动加防止重复提交很麻烦，引入 spring 又过于大材小用。
+有时候手动加防止重复提交很麻烦，每次手动编写不利于复用。
 
 所以希望从从简到繁实现一个工具，便于平时使用。
 
@@ -23,6 +23,8 @@
 
 - 支持注解式，完美整合 spring
 
+- 支持整合 spring-boot
+
 > [变更日志](https://github.com/houbb/resubmit/blob/master/CHANGELOG.md)
 
 # 快速开始
@@ -33,7 +35,7 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>0.0.2</version>
+    <version>${最新版本}</version>
 </dependency>
 ```
 
@@ -75,6 +77,17 @@ public void untilTtlTest() {
 }
 ```
 
+## @Resubmit 注解属性说明
+
+| 属性 | 说明 | 默认值 |
+|:---|:---|:---|
+| ttl() | 多久内禁止重复提交，单位为秒。| 60s |
+| cache() | 缓存实现策略 | 默认为基于 ConcurrentHashMap 实现的基于内存的缓存实现 |
+| keyGenerator() | key 实现策略，用于唯一标识一个方法+参数，判断是否为相同的提交 | md5 策略 |
+| tokenGenerator() | token 实现策略，用于唯一标识一个用户。 | 基于 HttpServletRequest 中的固定属性获取 |
+
+后面几个实现策略都支持自定义。
+
 # spring 整合使用
 
 ## maven 引入
@@ -83,7 +96,7 @@ public void untilTtlTest() {
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-spring</artifact>
-    <version>0.0.2</version>
+    <version>${最新版本}</version>
 </dependency>
 ```
 
@@ -132,9 +145,71 @@ public class ResubmitSpringTest {
 }
 ```
 
-# Road-Map
+# 整合 spring-boot
 
-- [ ] spring-boot 整合
+## maven 引入
+
+```xml
+<dependency>
+    <groupId>com.github.houbb</groupId>
+    <artifactId>resubmit-springboot-starter</artifactId>
+    <version>${最新版本}</version>
+</dependency>
+```
+
+## 代码实现
+
+- UserService.java
+
+这个方法实现和前面的一样。
+
+```java
+@Service
+public class UserService {
+
+    @Resubmit(ttl = 5)
+    public void queryInfo(final String id) {
+        System.out.println("query info: " + id);
+    }
+
+}
+```
+
+- Application.java
+
+启动入口
+
+```java
+@SpringBootApplication
+public class ResubmitApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ResubmitApplication.class, args);
+    }
+
+}
+```
+
+## 测试代码
+
+```java
+@ContextConfiguration(classes = ResubmitApplication.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ResubmitSpringBootStarterTest {
+
+    @Autowired
+    private UserService service;
+
+    @Test(expected = ResubmitException.class)
+    public void queryTest() {
+        service.queryInfo("1");
+        service.queryInfo("1");
+    }
+
+}
+```
+
+# Road-Map
 
 - [ ] 优化 spring 对应的版本依赖
 

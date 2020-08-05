@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.github.houbb.version.spring.boot.starter.config.VersionAutoConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.github.houbb.resubmit.springboot.starter.config.ResubmitAutoConfig
