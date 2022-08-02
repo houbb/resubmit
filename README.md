@@ -309,9 +309,17 @@ public class SpringDefineConfig {
 
 # Redis 的内置缓存策略
 
-为了便于复用，基于 redis 的缓存策略已实现。
+为了便于复用，基于 redis 的缓存策略已实现，后续有时间进行讲解。
 
 > [Redis-Config](https://github.com/houbb/redis-config)
+
+# 开源地址
+
+为了便于大家学习使用，目前防重复提交框架已开源。
+
+欢迎大家 fork+star，鼓励一下老马~
+
+> [https://github.com/houbb/resubmit](https://github.com/houbb/resubmit)
 
 # Road-Map
 
