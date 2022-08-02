@@ -1,11 +1,15 @@
 # resubmit
 
-[resubmit](https://github.com/houbb/resubmit) 是一款为 java 设计的防止重复提交框架。
+[resubmit](https://github.com/houbb/resubmit) 是一款为 java 设计的渐进式防止重复提交框架。
 
 [![Build Status](https://travis-ci.com/houbb/resubmit.svg?branch=master)](https://travis-ci.com/houbb/resubmit)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/resubmit/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/resubmit)
 [![](https://img.shields.io/badge/license-Apache2-FF0080.svg)](https://github.com/houbb/resubmit/blob/master/LICENSE.txt)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/houbb/resubmit)
+
+推荐阅读：
+
+[面试官：你们的项目中是怎么做防止重复提交的？](https://mp.weixin.qq.com/s/ZQx7cDUJXMDm4QXAPsfnFQ)
 
 ## 创作目的
 
