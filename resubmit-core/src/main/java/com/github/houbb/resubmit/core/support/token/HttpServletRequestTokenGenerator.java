@@ -6,7 +6,6 @@ import com.github.houbb.log.integration.core.Log;
 import com.github.houbb.log.integration.core.LogFactory;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 import com.github.houbb.resubmit.core.constant.ResubmitConst;
-import com.github.houbb.resubmit.core.support.cache.ConcurrentHashMapCache;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,8 +31,10 @@ public class HttpServletRequestTokenGenerator implements ITokenGenerator {
         for(Object param : params) {
             if(param instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest)param;
-                String requestToken = request.getParameter(ResubmitConst.TOKEN);
-                LOG.warn("Param is found in request, value is: {}", requestToken);
+                String requestToken = request.getHeader(ResubmitConst.TOKEN);
+                LOG.warn("header {} is found in request, value is: {}",
+                        ResubmitConst.TOKEN,
+                        requestToken);
                 return requestToken;
             }
         }

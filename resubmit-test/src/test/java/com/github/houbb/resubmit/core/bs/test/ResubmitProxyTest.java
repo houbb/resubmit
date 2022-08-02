@@ -1,8 +1,12 @@
 package com.github.houbb.resubmit.core.bs.test;
 
+import com.github.houbb.common.cache.core.service.CommonCacheServiceMap;
 import com.github.houbb.heaven.util.util.DateUtil;
 import com.github.houbb.resubmit.api.exception.ResubmitException;
+import com.github.houbb.resubmit.core.bs.ResubmitBs;
+import com.github.houbb.resubmit.core.support.key.KeyGenerator;
 import com.github.houbb.resubmit.core.support.proxy.ResubmitProxy;
+import com.github.houbb.resubmit.core.support.token.HttpServletRequestTokenGenerator;
 import com.github.houbb.resubmit.test.service.UserService;
 import org.junit.Test;
 
@@ -35,6 +39,16 @@ public class ResubmitProxyTest {
         UserService service = ResubmitProxy.getProxy(new UserService());
         service.queryInfo("1");
         service.queryInfo("2");
+    }
+
+    @Test
+    public void configTest() {
+        ResubmitBs resubmitBs = ResubmitBs.newInstance()
+                .cache(new CommonCacheServiceMap())
+                .keyGenerator(new KeyGenerator())
+                .tokenGenerator(new HttpServletRequestTokenGenerator());
+        UserService service = ResubmitProxy.getProxy(new UserService(), resubmitBs);
+        service.queryInfo("1");
     }
 
 }

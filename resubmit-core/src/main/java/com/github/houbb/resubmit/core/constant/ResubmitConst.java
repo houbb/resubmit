@@ -14,4 +14,10 @@ public class ResubmitConst {
      */
     public static final String TOKEN = "resubmit_token";
 
+    /**
+     * 默认的过期毫秒数
+     * @since 0.0.1
+     */
+    public static final long DEFAULT_EXPIRE_MILLS = 60000;
+
 }

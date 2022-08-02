@@ -2,11 +2,13 @@ package com.github.houbb.resubmit.spring.aop;
 
 import com.github.houbb.aop.spring.util.SpringAopUtil;
 import com.github.houbb.resubmit.api.annotation.Resubmit;
-import com.github.houbb.resubmit.core.support.proxy.ResubmitProxy;
+import com.github.houbb.resubmit.core.bs.ResubmitBs;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -18,6 +20,10 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class ResubmitAspect {
+
+    @Autowired
+    @Qualifier("resubmitBs")
+    private ResubmitBs resubmitBs;
 
     @Pointcut("@annotation(com.github.houbb.resubmit.api.annotation.Resubmit)")
     public void resubmitPointcut() {
@@ -39,10 +45,12 @@ public class ResubmitAspect {
         if(method.isAnnotationPresent(Resubmit.class)) {
             // 执行代理操作
             Object[] args = point.getArgs();
-            ResubmitProxy.resubmit(method, args);
+
+            resubmitBs.resubmit(method, args);
         }
 
         // 正常方法调用
         return point.proceed();
     }
+
 }

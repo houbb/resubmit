@@ -15,9 +15,9 @@
 
 ## 特性
 
-- 基于注解+字节码，配置灵活
+- 渐进式实现，可独立 spring 使用
 
-- 自动适配常见的日志框架
+- 基于注解+字节码，配置灵活
 
 - 支持编程式的调用
 
@@ -35,7 +35,7 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>${最新版本}</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -43,14 +43,22 @@
 
 - UserService.java
 
+`@Resubmit` 对应的属性如下：
+
+| 属性 | 说明 | 默认值 |
+|:---|:---|:---|
+| value() | 多久内禁止重复提交，单位为毫秒。| 60000 |
+
 ```java
-@Resubmit(ttl = 5)
+@Resubmit(5000)
 public void queryInfo(final String id) {
     System.out.println("query info: " + id);
 }
 ```
 
 - 测试代码
+
+如果在指定时间差内，重复请求，则会抛出异常 ResubmitException
 
 ```java
 @Test(expected = ResubmitException.class)
@@ -77,16 +85,29 @@ public void untilTtlTest() {
 }
 ```
 
-## @Resubmit 注解属性说明
+## 自定义
 
-| 属性 | 说明 | 默认值 |
+`ResubmitProxy.getProxy(new UserService());` 可以获取 UserService 对应的代理。
+
+等价于：
+
+```java
+ResubmitBs resubmitBs = ResubmitBs.newInstance()
+                .cache(new CommonCacheServiceMap())
+                .keyGenerator(new KeyGenerator())
+                .tokenGenerator(new HttpServletRequestTokenGenerator());
+
+UserService service = ResubmitProxy.getProxy(new UserService(), resubmitBs);
+```
+
+其中 ResubmitBs 作为引导类，对应的策略都支持自定义。
+
+| 属性 | 说明  | 默认值 |
 |:---|:---|:---|
-| ttl() | 多久内禁止重复提交，单位为秒。| 60s |
 | cache() | 缓存实现策略 | 默认为基于 ConcurrentHashMap 实现的基于内存的缓存实现 |
 | keyGenerator() | key 实现策略，用于唯一标识一个方法+参数，判断是否为相同的提交 | md5 策略 |
-| tokenGenerator() | token 实现策略，用于唯一标识一个用户。 | 基于 HttpServletRequest 中的固定属性获取 |
+| tokenGenerator() | token 实现策略，用于唯一标识一个用户。 | 从 HttpServletRequest 中的 header 属性 `resubmit_token` 中获取 |
 
-后面几个实现策略都支持自定义。
 
 # spring 整合使用
 
@@ -96,7 +117,7 @@ public void untilTtlTest() {
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-spring</artifact>
-    <version>${最新版本}</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -108,7 +129,7 @@ public void untilTtlTest() {
 @Service
 public class UserService {
 
-    @Resubmit(ttl = 5)
+    @Resubmit(5000)
     public void queryInfo(final String id) {
         System.out.println("query info: " + id);
     }
@@ -125,6 +146,18 @@ public class UserService {
 public class SpringConfig {
 }
 ```
+
+### @EnableResubmit 注解说明
+
+`@EnableResubmit` 中用户可以指定对应的实现策略，便于更加灵活的适应业务场景。
+
+和 `ResubmitBs` 中支持自定义的属性一一对应。
+
+| 属性 | 说明  | 默认值 |
+|:---|:---|:---|
+| cache() | 缓存实现策略 | 默认为基于 ConcurrentHashMap 实现的基于内存的缓存实现 |
+| keyGenerator() | key 实现策略，用于唯一标识一个方法+参数，判断是否为相同的提交 | md5 策略 |
+| tokenGenerator() | token 实现策略，用于唯一标识一个用户。 | 从 HttpServletRequest 中的 header 属性 `resubmit_token` 中获取 |
 
 ## 测试代码
 
@@ -153,7 +186,7 @@ public class ResubmitSpringTest {
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit-springboot-starter</artifactId>
-    <version>${最新版本}</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -167,7 +200,7 @@ public class ResubmitSpringTest {
 @Service
 public class UserService {
 
-    @Resubmit(ttl = 5)
+    @Resubmit(5000)
     public void queryInfo(final String id) {
         System.out.println("query info: " + id);
     }
@@ -209,10 +242,75 @@ public class ResubmitSpringBootStarterTest {
 }
 ```
 
+# 自定义策略
+
+上面提到 `@EnableResubmit` 中的策略支持自定义。
+
+此处仅以 cache 为例，为了简单，默认是基于本地内存的缓存实现。
+
+**如果你不是单点应用，那么基于 redis 的缓存更加合适**
+
+## 自定义缓存 cache
+
+### 实现缓存
+
+只需要实现 `ICommonCacheService` 接口即可。
+
+```java
+public class MyDefineCache extends CommonCacheServiceMap {
+
+    // 这里只是作为演示，实际生产建议使用 redis 作为统一缓存
+    @Override
+    public synchronized void set(String key, String value, long expireMills) {
+        System.out.println("------------- 自定义的设置实现");
+
+        super.set(key, value, expireMills);
+    }
+
+}
+```
+
+### core 中指定使用
+
+在非 spring 项目中，可以在引导类中指定我们定义的缓存。
+
+```java
+ResubmitBs resubmitBs = ResubmitBs.newInstance()
+                .cache(new MyDefineCache());
+
+UserService service = ResubmitProxy.getProxy(new UserService(), resubmitBs);
+```
+
+其他使用方式保持不变。
+
+### spring 中指定使用
+
+在 spring 项目中，我们需要调整一下配置，其他不变。
+
+```java
+@ComponentScan("com.github.houbb.resubmit.test.service")
+@Configuration
+@EnableResubmit(cache = "myDefineCache")
+public class SpringDefineConfig {
+
+    @Bean("myDefineCache")
+    public ICommonCacheService myDefineCache() {
+        return new MyDefineCache();
+    }
+
+}
+```
+
+`@EnableResubmit(cache = "myDefineCache")` 指定我们自定义的缓存策略名称。
+
+# Redis 的内置缓存策略
+
+为了便于复用，基于 redis 的缓存策略已实现。
+
+> [Redis-Config](https://github.com/houbb/redis-config)
+
 # Road-Map
 
 - [ ] 优化 spring 对应的版本依赖
 
 - [ ] 添加基于 redis 的 cache 实现
-
-- [ ] 添加基于 mysql 的 cache 实现

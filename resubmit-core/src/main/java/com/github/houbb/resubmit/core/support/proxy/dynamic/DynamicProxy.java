@@ -5,8 +5,8 @@
 
 package com.github.houbb.resubmit.core.support.proxy.dynamic;
 
-import com.github.houbb.resubmit.api.support.IResubmitProxy;
-import com.github.houbb.resubmit.core.support.proxy.ResubmitProxy;
+import com.github.houbb.resubmit.core.bs.ResubmitBs;
+import com.github.houbb.resubmit.core.support.proxy.AbstractProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionService;
  * @author houbinbin
  * @since 0.0.1
  */
-public class DynamicProxy implements InvocationHandler, IResubmitProxy {
+public class DynamicProxy extends AbstractProxy implements InvocationHandler {
 
     /**
      * 被代理的对象
@@ -33,6 +33,11 @@ public class DynamicProxy implements InvocationHandler, IResubmitProxy {
     private final Object target;
 
     public DynamicProxy(Object target) {
+        this.target = target;
+    }
+
+    public DynamicProxy(Object target, ResubmitBs resubmitBs) {
+        super(resubmitBs);
         this.target = target;
     }
 
@@ -51,7 +56,7 @@ public class DynamicProxy implements InvocationHandler, IResubmitProxy {
     @SuppressWarnings("all")
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //1. 添加判断
-        ResubmitProxy.resubmit(method, args);
+        super.resubmitBs.resubmit(method, args);
 
         //2. 返回以前的结果
         return method.invoke(target, args);

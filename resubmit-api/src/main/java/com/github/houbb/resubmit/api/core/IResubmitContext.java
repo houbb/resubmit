@@ -1,6 +1,6 @@
 package com.github.houbb.resubmit.api.core;
 
-import com.github.houbb.resubmit.api.support.ICache;
+import com.github.houbb.common.cache.api.service.ICommonCacheService;
 import com.github.houbb.resubmit.api.support.IKeyGenerator;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 
@@ -31,7 +31,7 @@ public interface IResubmitContext {
      * @return 存活时间
      * @since 0.0.1
      */
-    int ttl();
+    long expireMills();
 
     /**
      * key 生成策略
@@ -52,6 +52,6 @@ public interface IResubmitContext {
      * @since 0.0.1
      * @return 缓存实现
      */
-    ICache cache();
+    ICommonCacheService cache();
 
 }

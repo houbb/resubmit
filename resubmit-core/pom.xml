@@ -5,7 +5,7 @@
     <parent>
         <artifactId>resubmit</artifactId>
         <groupId>com.github.houbb</groupId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,6 +21,14 @@
         <!--============================== INTER ==============================-->
         <dependency>
             <groupId>com.github.houbb</groupId>
+            <artifactId>common-cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.houbb</groupId>
+            <artifactId>common-cache-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.houbb</groupId>
             <artifactId>heaven</artifactId>
         </dependency>
         <dependency>
@@ -33,10 +41,6 @@
         </dependency>
 
         <!--============================== OTHER ==============================-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

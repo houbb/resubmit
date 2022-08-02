@@ -5,7 +5,7 @@
 
 package com.github.houbb.resubmit.core.support.proxy.none;
 
-import com.github.houbb.resubmit.api.support.IResubmitProxy;
+import com.github.houbb.resubmit.core.support.proxy.AbstractProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * @author houbinbin
  * @since 0.0.1
  */
-public class NoneProxy implements InvocationHandler, IResubmitProxy {
+public class NoneProxy extends AbstractProxy implements InvocationHandler {
 
     /**
      * 代理对象

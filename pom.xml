@@ -12,7 +12,7 @@
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>resubmit-api</module>
         <module>resubmit-core</module>
@@ -39,10 +39,11 @@
         <project.compiler.level>1.7</project.compiler.level>
 
         <!--============================== INTER ==============================-->
-        <heaven.version>0.1.112</heaven.version>
+        <heaven.version>0.1.163</heaven.version>
         <log-integration.version>1.1.8</log-integration.version>
         <aop.version>0.0.2</aop.version>
         <test.version>0.0.1</test.version>
+        <common-cache.version>0.0.2</common-cache.version>
 
         <!--============================== OTHER ==============================-->
         <junit.version>4.12</junit.version>
@@ -81,6 +82,16 @@
             <!--============================== INTER ==============================-->
             <dependency>
                 <groupId>com.github.houbb</groupId>
+                <artifactId>common-cache-api</artifactId>
+                <version>${common-cache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>common-cache-core</artifactId>
+                <version>${common-cache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
                 <artifactId>heaven</artifactId>
                 <version>${heaven.version}</version>
             </dependency>
@@ -112,12 +123,6 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.version}</version>
                 <optional>true</optional>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
             </dependency>
 
             <dependency>

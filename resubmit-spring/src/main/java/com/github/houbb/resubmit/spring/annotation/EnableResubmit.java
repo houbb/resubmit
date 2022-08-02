@@ -17,4 +17,26 @@ import java.lang.annotation.*;
 @Import(ResubmitAopConfig.class)
 @EnableAspectJAutoProxy
 public @interface EnableResubmit {
+
+    /**
+     * 缓存实现策略 bean 名称
+     * @return 实现
+     * @since 0.0.1
+     */
+    String cache() default "resubmitCache";
+
+    /**
+     * key 生成策略 bean 名称
+     * @return 生成策略
+     * @since 0.0.1
+     */
+    String keyGenerator() default "resubmitKeyGenerator";
+
+    /**
+     * 密匙生成策略 bean 名称
+     * @return 生成策略
+     * @since 0.0.1
+     */
+    String tokenGenerator() default "resubmitTokenGenerator";
+
 }

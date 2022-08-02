@@ -1,7 +1,7 @@
 package com.github.houbb.resubmit.core.support.proxy.cglib;
 
-import com.github.houbb.resubmit.api.support.IResubmitProxy;
-import com.github.houbb.resubmit.core.support.proxy.ResubmitProxy;
+import com.github.houbb.resubmit.core.bs.ResubmitBs;
+import com.github.houbb.resubmit.core.support.proxy.AbstractProxy;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * date 2019/3/7
  * @since 0.0.2
  */
-public class CglibProxy implements MethodInterceptor, IResubmitProxy {
+public class CglibProxy extends AbstractProxy implements MethodInterceptor {
 
     /**
      * 被代理的对象
@@ -25,10 +25,15 @@ public class CglibProxy implements MethodInterceptor, IResubmitProxy {
         this.target = target;
     }
 
+    public CglibProxy(Object target, ResubmitBs resubmitBs) {
+        super(resubmitBs);
+        this.target = target;
+    }
+
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
         //1. 添加判断
-        ResubmitProxy.resubmit(method, objects);
+        super.resubmitBs.resubmit(method, objects);
 
         //2. 返回结果
         return method.invoke(target, objects);

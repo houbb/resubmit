@@ -1,7 +1,7 @@
 package com.github.houbb.resubmit.core.api;
 
+import com.github.houbb.common.cache.api.service.ICommonCacheService;
 import com.github.houbb.resubmit.api.core.IResubmitContext;
-import com.github.houbb.resubmit.api.support.ICache;
 import com.github.houbb.resubmit.api.support.IKeyGenerator;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 
@@ -30,7 +30,7 @@ public class ResubmitContext implements IResubmitContext {
      * 存活时间
      * @since 0.0.1
      */
-    private int ttl;
+    private long expireMills;
 
     /**
      * key 生成结果
@@ -48,7 +48,7 @@ public class ResubmitContext implements IResubmitContext {
      * 缓存信息
      * @since 0.0.1
      */
-    private ICache cache;
+    private ICommonCacheService cache;
 
     public static ResubmitContext newInstance() {
         return new ResubmitContext();
@@ -75,12 +75,12 @@ public class ResubmitContext implements IResubmitContext {
     }
 
     @Override
-    public int ttl() {
-        return ttl;
+    public long expireMills() {
+        return expireMills;
     }
 
-    public ResubmitContext ttl(int ttl) {
-        this.ttl = ttl;
+    public ResubmitContext expireMills(long expireMills) {
+        this.expireMills = expireMills;
         return this;
     }
 
@@ -105,11 +105,11 @@ public class ResubmitContext implements IResubmitContext {
     }
 
     @Override
-    public ICache cache() {
+    public ICommonCacheService cache() {
         return cache;
     }
 
-    public ResubmitContext cache(ICache cache) {
+    public ResubmitContext cache(ICommonCacheService cache) {
         this.cache = cache;
         return this;
     }
@@ -119,7 +119,7 @@ public class ResubmitContext implements IResubmitContext {
         return "ResubmitContext{" +
                 "params=" + Arrays.toString(params) +
                 ", method=" + method +
-                ", ttl=" + ttl +
+                ", expireMills=" + expireMills +
                 ", keyGenerator=" + keyGenerator +
                 ", tokenGenerator=" + tokenGenerator +
                 ", cache=" + cache +

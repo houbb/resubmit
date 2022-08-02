@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Resubmit(ttl = 5)
+    @Resubmit(5000)
     public void queryInfo(final String id) {
         System.out.println("query info: " + id);
     }

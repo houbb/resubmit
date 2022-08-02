@@ -1,18 +1,15 @@
 package com.github.houbb.resubmit.core.bs;
 
-import com.github.houbb.heaven.support.instance.impl.Instances;
+import com.github.houbb.common.cache.api.service.ICommonCacheService;
+import com.github.houbb.common.cache.core.service.CommonCacheServiceMap;
 import com.github.houbb.heaven.util.common.ArgUtil;
-import com.github.houbb.heaven.util.lang.ObjectUtil;
-import com.github.houbb.heaven.util.lang.reflect.ClassUtil;
 import com.github.houbb.resubmit.api.core.IResubmit;
 import com.github.houbb.resubmit.api.core.IResubmitContext;
-import com.github.houbb.resubmit.api.support.ICache;
 import com.github.houbb.resubmit.api.support.IKeyGenerator;
 import com.github.houbb.resubmit.api.support.ITokenGenerator;
 import com.github.houbb.resubmit.core.api.Resubmit;
 import com.github.houbb.resubmit.core.api.ResubmitContext;
-import com.github.houbb.resubmit.core.support.cache.ConcurrentHashMapCache;
-import com.github.houbb.resubmit.core.support.key.KeyGeneratorFastJson;
+import com.github.houbb.resubmit.core.support.key.KeyGenerator;
 import com.github.houbb.resubmit.core.support.token.HttpServletRequestTokenGenerator;
 
 import java.lang.reflect.Method;
@@ -30,44 +27,27 @@ public class ResubmitBs {
      * 实现类
      * @since 0.0.1
      */
-    private final IResubmit resubmit = Instances.singleton(Resubmit.class);
+    private final IResubmit resubmit = new Resubmit();
 
     /**
      * key 生成实现策略
      * @since 0.0.1
      */
-    private Class<? extends IKeyGenerator> keyGenerator;
+    private IKeyGenerator keyGenerator = new KeyGenerator();
 
     /**
      * 密匙生成策略
      * @since 0.0.1
      */
-    private Class<? extends ITokenGenerator> tokenGenerator;
+    private ITokenGenerator tokenGenerator = new HttpServletRequestTokenGenerator();
 
     /**
      * 缓存类信息
-     * @since 0.0.1
-     */
-    private Class<? extends ICache> cache;
-
-    /**
-     * 存活时间
-     * @since 0.0.1
-     */
-    private int ttl = 60;
-
-    /**
-     * 方法信息
-     * @since 0.0.1
-     */
-    private Method method;
-
-    /**
-     * 参数信息
      *
+     * 默认基于本地 map, 实际生产建议使用基于 redis 的实现。
      * @since 0.0.1
      */
-    private Object[] params;
+    private ICommonCacheService cache = new CommonCacheServiceMap();
 
     /**
      * 新建对象实例
@@ -78,108 +58,75 @@ public class ResubmitBs {
         return new ResubmitBs();
     }
 
-    public Class<? extends IKeyGenerator> keyGenerator() {
+    public IKeyGenerator keyGenerator() {
         return keyGenerator;
     }
 
-    public ResubmitBs keyGenerator(Class<? extends IKeyGenerator> keyGenerator) {
+    public ResubmitBs keyGenerator(IKeyGenerator keyGenerator) {
         this.keyGenerator = keyGenerator;
         return this;
     }
 
-    public Class<? extends ITokenGenerator> tokenGenerator() {
+    public ITokenGenerator tokenGenerator() {
         return tokenGenerator;
     }
 
-    public ResubmitBs tokenGenerator(Class<? extends ITokenGenerator> tokenGenerator) {
+    public ResubmitBs tokenGenerator(ITokenGenerator tokenGenerator) {
         this.tokenGenerator = tokenGenerator;
         return this;
     }
 
-    public Class<? extends ICache> cache() {
+    public ICommonCacheService cache() {
         return cache;
     }
 
-    public ResubmitBs cache(Class<? extends ICache> cache) {
+    public ResubmitBs cache(ICommonCacheService cache) {
         this.cache = cache;
-        return this;
-    }
-
-    public int ttl() {
-        return ttl;
-    }
-
-    public ResubmitBs ttl(int ttl) {
-        this.ttl = ttl;
-        return this;
-    }
-
-    public Method method() {
-        return method;
-    }
-
-    public ResubmitBs method(Method method) {
-        this.method = method;
-        return this;
-    }
-
-    public Object[] params() {
-        return params;
-    }
-
-    public ResubmitBs params(Object[] params) {
-        this.params = params;
         return this;
     }
 
     /**
      * 重提交判断
+     * @param expireMills 过期时间
+     * @param method 方法
+     * @param params 参数
      * @since 0.0.1
      */
-    public void resubmit() {
+    public void resubmit(final long expireMills,
+                         final Method method,
+                         final Object[] params) {
         //0. param check
         ArgUtil.notNull(method, "method");
 
-        //1. 默认值
-        fillDefault();
-
-        //2. 构建实例
-        final ICache cacheInstance = Instances.singleton(cache);
-        final IKeyGenerator keyInstance = ClassUtil.newInstance(keyGenerator);
-        final ITokenGenerator tokenInstance = ClassUtil.newInstance(tokenGenerator);
-
-        //3. 构建上下文
+        //1. 构建上下文
         IResubmitContext context = ResubmitContext.newInstance()
-                .cache(cacheInstance)
-                .keyGenerator(keyInstance)
-                .tokenGenerator(tokenInstance)
+                .cache(cache)
+                .keyGenerator(keyGenerator)
+                .tokenGenerator(tokenGenerator)
+                .expireMills(expireMills)
                 .method(method)
                 .params(params)
-                .ttl(ttl)
                 ;
 
-        //4. 执行结果
+        //2. 执行结果
         this.resubmit.resubmit(context);
     }
 
     /**
-     * 填充默认值
+     * 重复提交验证
+     *
+     * @param method 方法
+     * @param args   入参
      * @since 0.0.1
      */
-    private void fillDefault() {
-        if(cache == null
-            || ICache.class.equals(cache)) {
-            cache = ConcurrentHashMapCache.class;
-        }
+    public void resubmit(final Method method,
+                         final Object[] args) {
+        if (method.isAnnotationPresent(com.github.houbb.resubmit.api.annotation.Resubmit.class)) {
+            com.github.houbb.resubmit.api.annotation.Resubmit resubmit = method.getAnnotation(com.github.houbb.resubmit.api.annotation.Resubmit.class);
 
-        if(ObjectUtil.isNull(keyGenerator)
-            || IKeyGenerator.class.equals(keyGenerator)) {
-            keyGenerator = KeyGeneratorFastJson.class;
-        }
-
-        if(ObjectUtil.isNull(tokenGenerator)
-            || ITokenGenerator.class.equals(tokenGenerator)) {
-            tokenGenerator = HttpServletRequestTokenGenerator.class;
+            // 构建入参
+            long expireMills = resubmit.value();
+            this.resubmit(expireMills, method, args);
         }
     }
 
