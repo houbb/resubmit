@@ -11,6 +11,8 @@
 
 [面试官：你们的项目中是怎么做防止重复提交的？](https://mp.weixin.qq.com/s/ZQx7cDUJXMDm4QXAPsfnFQ)
 
+[resubmit 渐进式防重复提交框架简介](https://mp.weixin.qq.com/s/tVkeyrDNc_scRusbClrY1w)
+
 ## 创作目的
 
 有时候手动加防止重复提交很麻烦，每次手动编写不利于复用。
