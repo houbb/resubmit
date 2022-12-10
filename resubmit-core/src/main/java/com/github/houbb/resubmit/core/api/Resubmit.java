@@ -38,7 +38,7 @@ public class Resubmit implements IResubmit {
 
         //1. 说明已经提交过一次了。
         if(contains) {
-            LOG.warn("信息重复提交, key: {}", fullKey);
+            LOG.debug("[Resubmit] 信息重复提交, key: {}", fullKey);
             throw new ResubmitException("信息重复提交!");
         }
 
@@ -47,7 +47,7 @@ public class Resubmit implements IResubmit {
         long expireMills = context.expireMills();
         // value 也可以进行相关的处理？
         cache.set(fullKey, "1", expireMills);
-        LOG.info("设置 cache 信息, key: {}, ttl: {}", fullKey, expireMills);
+        LOG.debug("[Resubmit] 设置 cache 信息, key: {}, ttl: {}", fullKey, expireMills);
     }
 
 }

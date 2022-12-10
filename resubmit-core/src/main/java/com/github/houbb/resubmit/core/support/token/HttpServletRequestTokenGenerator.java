@@ -24,7 +24,7 @@ public class HttpServletRequestTokenGenerator implements ITokenGenerator {
     @Override
     public String gen(Object[] params) {
         if(ArrayUtil.isEmpty(params)) {
-            LOG.warn("Param is empty, return empty");
+            LOG.debug("[Resubmit] Param is empty, return empty");
             return StringUtil.EMPTY;
         }
 
@@ -32,13 +32,13 @@ public class HttpServletRequestTokenGenerator implements ITokenGenerator {
             if(param instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest)param;
                 String requestToken = request.getHeader(ResubmitConst.TOKEN);
-                LOG.warn("header {} is found in request, value is: {}",
+                LOG.debug("[Resubmit] header {} is found in request, value is: {}",
                         ResubmitConst.TOKEN,
                         requestToken);
                 return requestToken;
             }
         }
-        LOG.warn("Param is not found in request, return empty");
+        LOG.debug("[Resubmit] Param is not found in request, return empty");
         return StringUtil.EMPTY;
     }
 

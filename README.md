@@ -41,7 +41,7 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -123,7 +123,7 @@ UserService service = ResubmitProxy.getProxy(new UserService(), resubmitBs);
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-spring</artifact>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -192,7 +192,7 @@ public class ResubmitSpringTest {
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit-springboot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
