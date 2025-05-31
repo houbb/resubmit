@@ -406,7 +406,7 @@ public class SpringDefineConfig {
 | [rate-limit](https://github.com/houbb/rate-limit) | 限流核心库 | 已开源 |
 | [cache](https://github.com/houbb/cache) | 手写渐进式 redis | 已开源 |
 | [lock](https://github.com/houbb/lock) | 开箱即用的分布式锁 | 已开源 |
-| [common-cache](https://github.com/houbb/common-cache) | 通用缓存标准定义 | 研发中 |
+| [common-cache](https://github.com/houbb/common-cache) | 通用缓存标准定义 | 已开源 |
 | [redis-config](https://github.com/houbb/redis-config) | 兼容各种常见的 redis 配置模式 | 研发中 |
 | [quota-server](https://github.com/houbb/quota-server) | 限额限次核心服务 | 待开始 |
 | [quota-admin](https://github.com/houbb/quota-admin) | 限额限次控台 | 待开始 |
