@@ -121,13 +121,33 @@ public class ResubmitBs {
      */
     public void resubmit(final Method method,
                          final Object[] args) {
-        if (method.isAnnotationPresent(com.github.houbb.resubmit.api.annotation.Resubmit.class)) {
-            com.github.houbb.resubmit.api.annotation.Resubmit resubmit = method.getAnnotation(com.github.houbb.resubmit.api.annotation.Resubmit.class);
+        // 获取注解信息
+        //1. 方法上的优先级较高，如果存在一个，则直接忽略类上的。避免混乱。
+        com.github.houbb.resubmit.api.annotation.Resubmit annotationResubmit = getAnnotationResubmit(method);
+        if(annotationResubmit != null) {
+            if(!annotationResubmit.enable()) {
+                return;
+            }
 
-            // 构建入参
-            long expireMills = resubmit.value();
-            this.resubmit(expireMills, method, args);
+            long actualExpireMills = annotationResubmit.value();
+            this.resubmit(actualExpireMills, method, args);
         }
     }
+
+    private com.github.houbb.resubmit.api.annotation.Resubmit getAnnotationResubmit(final Method method) {
+        // 获取注解信息
+        //1. 方法上的优先级较高，如果存在一个，则直接忽略类上的。避免混乱。
+        com.github.houbb.resubmit.api.annotation.Resubmit methodResubmit = method.getAnnotation(com.github.houbb.resubmit.api.annotation.Resubmit.class);
+        if(methodResubmit != null) {
+            return methodResubmit;
+        }
+
+        //2. 类上的信息
+        final Class<?> clazz = method.getDeclaringClass();
+        com.github.houbb.resubmit.api.annotation.Resubmit classResubmit = clazz.getAnnotation(com.github.houbb.resubmit.api.annotation.Resubmit.class);
+        return classResubmit;
+    }
+
+
 
 }

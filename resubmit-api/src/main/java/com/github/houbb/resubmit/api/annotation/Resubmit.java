@@ -7,8 +7,8 @@ import java.lang.annotation.*;
  * @since 0.0.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-@Documented
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Inherited
 public @interface Resubmit {
 
     /**
@@ -17,6 +17,13 @@ public @interface Resubmit {
      * @return 时间
      * @since 0.0.1
      */
-    int value() default 60000;
+    int value() default 8000;
+
+    /**
+     * 是否启用
+     * @return 是否
+     * @since 1.2.0
+     */
+    boolean enable() default true;
 
 }

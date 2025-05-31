@@ -31,6 +31,8 @@
 
 - 支持整合 spring-boot
 
+- 支持方法级别、类级别注解
+
 > [变更日志](https://github.com/houbb/resubmit/blob/master/CHANGELOG.md)
 
 # 快速开始
@@ -41,7 +43,7 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
@@ -49,11 +51,12 @@
 
 - UserService.java
 
-`@Resubmit` 对应的属性如下：
+注解 `@Resubmit` 对应的属性如下，可以在方法或者类上。方法的级别优先于类。
 
-| 属性 | 说明 | 默认值 |
-|:---|:---|:---|
-| value() | 多久内禁止重复提交，单位为毫秒。| 60000 |
+| 属性       | 说明               | 默认值  |
+|:---------|:-----------------|:-----|
+| value()  | 多久内禁止重复提交，单位为毫秒。 | 8000 |
+| enable() | 是否启用   | true |
 
 ```java
 @Resubmit(5000)
@@ -179,6 +182,54 @@ public class ResubmitSpringTest {
     public void queryTest() {
         service.queryInfo("1");
         service.queryInfo("1");
+    }
+
+}
+```
+
+## 类级别例子
+
+v1.2.0 注解支持在类级别指定。同时方法级别的优先级更高。
+
+### service 代码
+
+```java
+@Service
+@Resubmit(value = 5000, enable = true)
+public class ClassLevelService {
+
+    @Resubmit(enable = false)
+    public void queryInfoNoLimit(final String id) {
+        System.out.println("queryInfoNoLimit: " + id);
+    }
+
+    public void queryInfoLimit(final String id) {
+        System.out.println("queryInfoLimit: " + id);
+    }
+
+}
+```
+
+### 测试类
+
+```java
+@ContextConfiguration(classes = SpringConfig.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ResubmitSpringClassLevelTest {
+
+    @Autowired
+    private ClassLevelService classLevelService;
+
+    @Test(expected = ResubmitException.class)
+    public void queryInfoLimitTest() {
+        classLevelService.queryInfoLimit("1");
+        classLevelService.queryInfoLimit("1");
+    }
+
+    @Test
+    public void queryInfoNoLimitTest() {
+        classLevelService.queryInfoNoLimit("1");
+        classLevelService.queryInfoNoLimit("1");
     }
 
 }

@@ -26,7 +26,14 @@ public class ResubmitAspect {
     private ResubmitBs resubmitBs;
 
     @Pointcut("@annotation(com.github.houbb.resubmit.api.annotation.Resubmit)")
-    public void resubmitPointcut() {
+    public void methodMyPointcut() {
+    }
+
+    /**
+     * 指定注解的类
+     */
+    @Pointcut("@within(com.github.houbb.resubmit.api.annotation.Resubmit)")
+    public void classMyPointcut() {
     }
 
     /**
@@ -38,16 +45,13 @@ public class ResubmitAspect {
      * @throws Throwable 异常信息
      * @since 0.0.2
      */
-    @Around("resubmitPointcut()")
+    @Around("methodMyPointcut() || classMyPointcut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Method method = SpringAopUtil.getCurrentMethod(point);
 
-        if(method.isAnnotationPresent(Resubmit.class)) {
-            // 执行代理操作
-            Object[] args = point.getArgs();
-
-            resubmitBs.resubmit(method, args);
-        }
+        // 执行代理操作
+        Object[] args = point.getArgs();
+        resubmitBs.resubmit(method, args);
 
         // 正常方法调用
         return point.proceed();
