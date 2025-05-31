@@ -47,9 +47,7 @@
 </dependency>
 ```
 
-## 编码
-
-- UserService.java
+## 注解说明
 
 注解 `@Resubmit` 对应的属性如下，可以在方法或者类上。方法的级别优先于类。
 
@@ -57,6 +55,10 @@
 |:---------|:-----------------|:-----|
 | value()  | 多久内禁止重复提交，单位为毫秒。 | 8000 |
 | enable() | 是否启用   | true |
+
+## 编码
+
+- UserService.java
 
 ```java
 @Resubmit(5000)
@@ -126,7 +128,7 @@ UserService service = ResubmitProxy.getProxy(new UserService(), resubmitBs);
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-spring</artifact>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
@@ -243,7 +245,7 @@ public class ResubmitSpringClassLevelTest {
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit-springboot-starter</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
