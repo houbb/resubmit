@@ -44,6 +44,7 @@ public final class ResubmitProxy {
      * 获取对象代理
      * @param <T> 泛型
      * @param object 对象代理
+     * @param resubmitBs 引导类
      * @return 代理信息
      * @since 0.0.1
      */
