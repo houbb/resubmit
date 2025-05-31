@@ -1,6 +1,7 @@
 package com.github.houbb.resubmit.core.api;
 
 import com.github.houbb.common.cache.api.service.ICommonCacheService;
+import com.github.houbb.common.cache.core.constant.CommonCacheConst;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.log.integration.core.Log;
 import com.github.houbb.log.integration.core.LogFactory;
@@ -34,19 +35,14 @@ public class Resubmit implements IResubmit {
         String tokenKey = tokenGenerator.gen(params);
 
         String fullKey = tokenKey+paramKey;
-        boolean contains = cache.contains(fullKey);
+        long expireMills = context.expireMills();
 
-        //1. 说明已经提交过一次了。
-        if(contains) {
+        String sexNx = cache.set(fullKey, "1", CommonCacheConst.NX, CommonCacheConst.PX, (int) expireMills);
+        if(!CommonCacheConst.OK.equalsIgnoreCase(sexNx)) {
             LOG.debug("[Resubmit] 信息重复提交, key: {}", fullKey);
             throw new ResubmitException("信息重复提交!");
         }
 
-        //2. 没有提交过
-        // 正常的流程处理
-        long expireMills = context.expireMills();
-        // value 也可以进行相关的处理？
-        cache.set(fullKey, "1", expireMills);
         LOG.debug("[Resubmit] 设置 cache 信息, key: {}, ttl: {}", fullKey, expireMills);
     }
 

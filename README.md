@@ -41,7 +41,7 @@
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-core</artifact>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -123,7 +123,7 @@ UserService service = ResubmitProxy.getProxy(new UserService(), resubmitBs);
 <dependency>
     <group>com.github.houbb</group>
     <artifact>resubmit-spring</artifact>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -192,7 +192,7 @@ public class ResubmitSpringTest {
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>resubmit-springboot-starter</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -325,11 +325,13 @@ public class SpringDefineConfig {
 
 # Road-Map
 
-- [ ] 优化 spring 对应的版本依赖
+- [ ] 添加 enable 属性，支持类级别防止重复提交
 
 - [ ] 添加基于 redis 的 cache 实现
 
 - [ ] 添加基于 mysql 的 cache 实现，可以针对 common-cache 进行拓展
+
+- [ ] 优化 spring 对应的版本依赖
 
 # 限流系列
 
