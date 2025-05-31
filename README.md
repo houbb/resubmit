@@ -376,7 +376,7 @@ public class SpringDefineConfig {
 
 # Road-Map
 
-- [ ] 添加 enable 属性，支持类级别防止重复提交
+- [x] 添加 enable 属性，支持类级别防止重复提交
 
 - [ ] 添加基于 redis 的 cache 实现
 
